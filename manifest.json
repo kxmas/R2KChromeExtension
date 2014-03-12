@@ -5,10 +5,11 @@
   "description": "Shares content to Reader2000",
   "version": "0.0.1",
   "icons": {
-    "16": "images/icon.png"
+    "16": "images/icon_16.png",
+    "128": "images/icon_128.png"
   },
   "browser_action": {
-    "default_icon": "images/icon.png",
+    "default_icon": "images/icon_16.png",
     "default_title": "Note in R2K"
   },
   "permissions": [
