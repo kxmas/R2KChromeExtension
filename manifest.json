@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+
+  "name": "Note in Reader2000",
+  "description": "Shares content to Reader2000",
+  "version": "0.0.1",
+  "icons": {
+    "16": "images/icon.png"
+  },
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_title": "Note in R2K"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "*://www.reader2000.com/*"
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": ["scripts/background.js"]
+  },
+  "web_accessible_resources": [
+    "scripts/injection.js",
+    "scripts/jquery.js"
+  ],
+  "content_security_policy": "default-src 'none'; style-src 'self'; script-src 'self' https://www.reader2000.com; object-src 'self'; connect-src https://www.reader2000.com"
+}
