@@ -6,7 +6,7 @@
 	  c.src = chrome.extension.getURL("scripts/jquery.js");
 	} catch(e) {
 	  console.error(e.toString());
-	  c.src = 'http://code.jquery.com/jquery-' + g + '.min.js';
+	  c.src = 'https://code.jquery.com/jquery-' + g + '.min.js';
 	}
         c.onload = c.onreadystatechange = function() {
             if (!b && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
