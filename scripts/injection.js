@@ -2,7 +2,12 @@
     if (! (f = e.jQuery) || g > f.fn.jquery || h(f)) {
         c = a.createElement("script");
         c.type = "text/javascript";
-        c.src = chrome.extension.getURL("scripts/jquery.js");
+	try {
+	  c.src = chrome.extension.getURL("scripts/jquery.js");
+	} catch(e) {
+	  console.error(e.toString());
+	  c.src = 'http://code.jquery.com/jquery-' + g + '.min.js';
+	}
         c.onload = c.onreadystatechange = function() {
             if (!b && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
                 h((f = e.jQuery).noConflict(1), b = 1);
