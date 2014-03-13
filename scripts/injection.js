@@ -49,6 +49,7 @@ function($, L) {
     if (sel == null) return '';
     try {
       var w = getSelection().getRangeAt(0).cloneContents();
+      filter_doc_fragment(w);
       nNd.appendChild(w);
       
       $(nNd).find(".twitter-tweet").each(function(index, element) {
@@ -61,6 +62,70 @@ function($, L) {
       
       return nNd.innerHTML;
     } catch (e) { return '' }
+  }
+  
+  var filter_doc_fragment = function(doc_fragment) {
+    try {
+      remove_nuisances(doc_fragment);
+      remove_hidden_elements(doc_fragment);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  
+  var remove_nuisances = function(doc_fragment) {
+    var nuisance_selectors = "script, noscript, .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column";    
+    var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
+    delete_nodes(delNodes);
+    
+    var gawker_nuisance_selectors = "span.magnifier.lightBox, span.image-annotation-footnote-wrapper, aside";
+    if (isGawkerSite(document.location)) {
+      delNodes = doc_fragment.querySelectorAll(gawker_nuisance_selectors);
+      delete_nodes(delNodes);
+    }
+  }
+  
+  var none_display_node_filter = function(node) {
+    try {
+      if (node.style.display === "none") {
+	return NodeFilter.FILTER_ACCEPT;
+      } else {
+	return NodeFilter.FILTER_SKIP;
+      }
+    } catch (e) {
+      return NodeFilter.FILTER_SKIP;
+    }
+  }
+  
+  var remove_hidden_elements = function(doc_fragment) {
+    var to_remove = new Array();
+    var walker = document.createTreeWalker(doc_fragment, NodeFilter.SHOW_ELEMENT, none_display_node_filter, false);
+    while (walker.nextNode()) {
+      to_remove.push(walker.currentNode);
+    }
+    delete_nodes(to_remove);
+  }
+  
+  var delete_nodes = function(nodes_to_delete) {
+    for (var i = 0; i < nodes_to_delete.length; ++i) {
+      var node = nodes_to_delete[i];
+      var parent_node = node.parentNode;
+      if (parent_node) {
+	parent_node.removeChild(node);
+      }
+    }
+  }
+  
+  var isGawkerSite = function(doc_location) {
+    var gawker_sites = [ 'io9\.com', 'gawker\.com', 'gizmodo\.com', 'kotaku\.com', 'jalopnik\.com',
+			'lifehacker\.com', 'deadspin\.com', 'jezebel\.com' ];
+    for (var i = 0; i < gawker_sites.length; ++i) {
+      var patt = new RegExp(gawker_sites[i], 'i');
+      if (patt.test(doc_location)) {
+	return true;
+      }
+    }
+    return false;
   }
   
   var sharebox_id = "__nir-sharebox"
