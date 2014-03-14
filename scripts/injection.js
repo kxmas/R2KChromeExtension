@@ -2,12 +2,13 @@
     if (! (f = e.jQuery) || g > f.fn.jquery || h(f)) {
         c = a.createElement("script");
         c.type = "text/javascript";
-	try {
-	  c.src = chrome.extension.getURL("scripts/jquery.js");
-	} catch(e) {
-	  console.error(e.toString());
-	  c.src = 'https://code.jquery.com/jquery-' + g + '.min.js';
-	}
+        try {
+          // hacky
+          c.src = a.getElementById('__nir-injection-script').getAttribute('src').replace('injection.js', 'jquery.js');
+        } catch(e) {
+          console.error(e.toString());
+          c.src = 'https://code.jquery.com/jquery-' + g + '.min.js';
+        }
         c.onload = c.onreadystatechange = function() {
             if (!b && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
                 h((f = e.jQuery).noConflict(1), b = 1);
@@ -88,9 +89,9 @@ function($, L) {
   var none_display_node_filter = function(node) {
     try {
       if (node.style.display === "none") {
-	return NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_ACCEPT;
       } else {
-	return NodeFilter.FILTER_SKIP;
+        return NodeFilter.FILTER_SKIP;
       }
     } catch (e) {
       return NodeFilter.FILTER_SKIP;
