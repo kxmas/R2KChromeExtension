@@ -75,11 +75,11 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "script, noscript, .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside";    
+    var nuisance_selectors = "script, noscript, .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
-    var gawker_nuisance_selectors = "span.magnifier.lightBox, span.image-annotation-footnote-wrapper";
+    var gawker_nuisance_selectors = "span.magnifier.lightBox, span.image-annotation-footnote-wrapper, .proxima, .meta-container";
     if (isGawkerSite(document.location)) {
       delNodes = doc_fragment.querySelectorAll(gawker_nuisance_selectors);
       delete_nodes(delNodes);
