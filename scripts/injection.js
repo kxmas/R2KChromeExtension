@@ -190,6 +190,12 @@ function($, L) {
       
       if (!$item.get(0)) { alert("Open an item first!"); window.__remove_sharebox(); throw(0); }
       
+      try {
+	$item = $(remove_revisions($item.get(0)));
+      } catch(e) {
+	console.error(e);
+      }
+      
       var $header = $item.find(".NB-feed-story-title")
       
       var div = document.createElement(div);
@@ -231,6 +237,19 @@ function($, L) {
     var target = window.location.protocol + "//" + bookmarklet_host();
     
     win.postMessage(payload, target)
+  }
+  
+  var remove_revisions = function(share_node) {
+    var doc_fragment = document.createDocumentFragment();
+    doc_fragment.appendChild(share_node.cloneNode(true));
+    var $item = $(doc_fragment.firstChild);
+    $item.find("del").remove();
+    $item.find("ins").each(function(idx, elm) {
+      if (elm.firstChild && elm.firstChild.nodeType === Node.TEXT_NODE) {
+	$(elm.firstChild).unwrap();
+      }      
+    });
+    return $item.get();
   }
   
   var show_sharebox = function() {
