@@ -75,7 +75,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "script, noscript, .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide";    
+    var nuisance_selectors = "script, noscript, figcaption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
