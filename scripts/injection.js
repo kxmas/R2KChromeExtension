@@ -5,12 +5,14 @@
         try {
           // hacky
           c.src = a.getElementById('__nir-injection-script').getAttribute('src').replace('injection.js', 'jquery.js');
-        } catch(e) {
-          console.error(e.toString());
+        } catch(exception_var_1) {
+          console.error(exception_var_1);
           c.src = 'https://code.jquery.com/jquery-' + g + '.min.js';
         }
+        console.debug("jquery src: " + c.src);
         c.onload = c.onreadystatechange = function() {
             if (!b && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
+              // get reference to our version of jQuery by unloading it and pass it as an arg
                 h((f = e.jQuery).noConflict(1), b = 1);
                 f(c).remove()
             }
@@ -62,20 +64,20 @@ function($, L) {
       });
       
       return nNd.innerHTML;
-    } catch (e) { return '' }
+    } catch (exception_var_1) { return '' }
   }
   
   var filter_doc_fragment = function(doc_fragment) {
     try {
       remove_nuisances(doc_fragment);
       remove_hidden_elements(doc_fragment);
-    } catch(e) {
-      console.error(e);
+    } catch(exception_var_1) {
+      console.error(exception_var_1);
     }
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "script, noscript, figcaption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide";    
+    var nuisance_selectors = "script, noscript, figcaption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -88,12 +90,12 @@ function($, L) {
   
   var none_display_node_filter = function(node) {
     try {
-      if (node.style.display === "none") {
+      if (node.style && node.style.display === "none") {
         return NodeFilter.FILTER_ACCEPT;
       } else {
         return NodeFilter.FILTER_SKIP;
       }
-    } catch (e) {
+    } catch (exception_var_1) {
       return NodeFilter.FILTER_SKIP;
     }
   }
@@ -192,8 +194,8 @@ function($, L) {
       
       try {
 	$item = $(remove_revisions($item.get(0)));
-      } catch(e) {
-	console.error(e);
+      } catch(exception_var_1) {
+	console.error(exception_var_1);
       }
       
       var $header = $item.find(".NB-feed-story-title")
