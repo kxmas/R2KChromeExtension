@@ -3,7 +3,7 @@
 
   "name": "Note in Reader2000",
   "description": "Shares content to Reader2000",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "icons": {
     "16": "images/icon_16.png",
     "128": "images/icon_128.png"
