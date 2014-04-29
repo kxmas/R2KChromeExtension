@@ -87,7 +87,7 @@ function($, L) {
       delete_nodes(delNodes);
     }
 
-    var wsj_nuisance_selectors = ".article-chiclet, .ticker, .module.inset-box, .datestamp-dsk, .module.shareTools, .zonedModule, .shareTree, .byline-dsk, .module.articleHeadgroup, .module.trendingNow, .scrimWSJ_overlay, .module.editors-picks, #commentFormContainer, .module.deskfoot, .targetCaption-video, .i-credit, .module.rich-media-inset-iframe ";
+    var wsj_nuisance_selectors = ".article-chiclet, .ticker, .module.inset-box, .datestamp-dsk, .module.shareTools, .zonedModule, .shareTree, .byline-dsk, .module.articleHeadgroup, .module.trendingNow, .scrimWSJ_overlay, .module.editors-picks, #commentFormContainer, .module.deskfoot, .targetCaption-video, .i-credit, .module.rich-media-inset-iframe, .v-assett, .insettipBox, .cxense";
     if (isWSJ(document.location)) {
       delNodes = doc_fragment.querySelectorAll(wsj_nuisance_selectors);
       delete_nodes(delNodes);
