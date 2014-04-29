@@ -77,13 +77,19 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "script, noscript, figcaption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup";    
+    var nuisance_selectors = "script, noscript, figcaption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
     var gawker_nuisance_selectors = "span.magnifier.lightBox, span.image-annotation-footnote-wrapper, .proxima, .meta-container";
     if (isGawkerSite(document.location)) {
       delNodes = doc_fragment.querySelectorAll(gawker_nuisance_selectors);
+      delete_nodes(delNodes);
+    }
+
+    var wsj_nuisance_selectors = ".article-chiclet, .ticker, .module.inset-box, .datestamp-dsk, .module.shareTools, .zonedModule, .shareTree, .byline-dsk, .module.articleHeadgroup, .module.trendingNow, .scrimWSJ_overlay, .module.editors-picks, #commentFormContainer, .module.deskfoot, .targetCaption-video, .i-credit, .module.rich-media-inset-iframe ";
+    if (isWSJ(document.location)) {
+      delNodes = doc_fragment.querySelectorAll(wsj_nuisance_selectors);
       delete_nodes(delNodes);
     }
   }
@@ -118,6 +124,13 @@ function($, L) {
       }
     }
   }
+
+
+  var isWSJ = function(doc_location) {
+    var patt = new RegExp('wsj\.com', 'i');
+    return patt.test(doc_location);
+  }
+
   
   var isGawkerSite = function(doc_location) {
     var gawker_sites = [ 'io9\.com', 'gawker\.com', 'gizmodo\.com', 'kotaku\.com', 'jalopnik\.com',
