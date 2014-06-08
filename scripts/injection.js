@@ -240,6 +240,14 @@ function($, L) {
       if (empty_selection) {
         selection_html = $item.find(".detail-body").html();
       }
+    } else if (isGawkerSite(document.location)) {
+      var item = document.querySelector(".entry-content");
+      var doc_fragment = document.createDocumentFragment();
+      doc_fragment.appendChild(item.cloneNode(true));
+      filter_doc_fragment(doc_fragment);
+      if (empty_selection) {
+        selection_html = doc_fragment.firstElementChild.outerHTML;
+      }
     }
     
     var payload = {
