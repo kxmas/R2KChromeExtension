@@ -172,7 +172,7 @@ function($, L) {
     
     if (/www\.google\.[^/]+\/reader/.test(document.location) && typeof(window.getPermalink) == 'function') {
       var l = window.getPermalink();
-      if (! l) { alert('Open an item first'); window.__remove_sharebox(); throw(0); }
+      validate_item(l, "Open an item first!");
       title = l.title;
       source_url = l.url;
       
@@ -187,9 +187,7 @@ function($, L) {
         $item = $(".inlineFrame");
       }
       
-      if (!$item.get(0)) {
-        alert("Open an item first!"); window.__remove_sharebox(); throw(0);
-      }
+      validate_item($item.get(0), "Open an item first!");
       
       var $header = $item.find(".entryHolder .entryTitle");
       
@@ -204,8 +202,7 @@ function($, L) {
       }
     } else if (/newsblur\.com\//.test(document.location)) {
       var $item = $(".NB-feed-story.NB-selected, div.NB-feed-story:has(.NB-feed-story-content)");
-      
-      if (!$item.get(0)) { alert("Open an item first!"); window.__remove_sharebox(); throw(0); }
+      validate_item($item.get(0), "Open an item first!");
       
       try {
 	$item = $(remove_revisions($item.get(0)));
@@ -227,7 +224,7 @@ function($, L) {
     } else if (/digg\.com\/reader/.test(document.location)) {
       var $item = $(".feeditem-list.expanded");
       
-      if (!$item.get(0)) { alert("Open an item first!"); window.__remove_sharebox(); throw(0); }
+      validate_item($item.get(0), "Open an item first!");
       
       var $header = $item.find(".story-title > a");
       
@@ -240,14 +237,10 @@ function($, L) {
       if (empty_selection) {
         selection_html = $item.find(".detail-body").html();
       }
-    } else if (isGawkerSite(document.location)) {
-      var item = document.querySelector(".entry-content");
-      var doc_fragment = document.createDocumentFragment();
-      doc_fragment.appendChild(item.cloneNode(true));
-      filter_doc_fragment(doc_fragment);
-      if (empty_selection) {
-        selection_html = doc_fragment.firstElementChild.outerHTML;
-      }
+    } else if (empty_selection && isGawkerSite(document.location)) {
+      selection_html = fabricate_selection(".post-content.entry-content, .entry-content, .post-content");
+    } else if (empty_selection && /buzzfeed\.com/.test(document.location)) {
+      selection_html = fabricate_selection('div[data-print="body"]');
     }
     
     var payload = {
@@ -262,6 +255,32 @@ function($, L) {
     var target = window.location.protocol + "//" + bookmarklet_host();
     
     win.postMessage(payload, target);
+  }
+  
+  var fabricate_selection = function(selector) {
+    try {
+      var item = document.querySelector(selector);
+      if (item) {
+        var doc_fragment = document.createDocumentFragment();
+        doc_fragment.appendChild(item.cloneNode(true));
+        filter_doc_fragment(doc_fragment);
+        return doc_fragment.firstElementChild.outerHTML;
+      } else {
+        return '';
+      }
+    } catch(exception_var_2) {
+      console.error(exception_var_2);
+      return '';
+    }
+  }
+    
+  
+  var validate_item = function(item, message) {
+    if (!item) {
+      alert(message);
+      window.__remove_sharebox();
+      throw(0);      
+    }
   }
   
   var remove_revisions = function(share_node) {
