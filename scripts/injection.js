@@ -77,7 +77,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon";    
+    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -127,7 +127,7 @@ function($, L) {
 
 
   var isWSJ = function(doc_location) {
-    var patt = new RegExp('wsj\.com', 'i');
+    var patt = new RegExp('wsj\.com|marketwatch\.com', 'i');
     return patt.test(doc_location);
   }
 
@@ -160,13 +160,15 @@ function($, L) {
   
   window.__nir_get_info_from_parent = function() {
     $("#"+ sharebox_id).find("iframe").css('border', 0);
-    var selection_html = get_selection_html()
-    var full_html = $("body").html()
+    var selection_html = get_selection_html();
+    var empty_selection = ($.trim(selection_html) === '');
     
-    var win = $("#"+ sharebox_id).find("iframe")[0].contentWindow
+    var full_html = $("body").html();
     
-    var title = document.title
-    var source_url = document.URL
+    var win = $("#"+ sharebox_id).find("iframe")[0].contentWindow;
+    
+    var title = document.title;
+    var source_url = document.URL;
     
     if (/www\.google\.[^/]+\/reader/.test(document.location) && typeof(window.getPermalink) == 'function') {
       var l = window.getPermalink();
@@ -174,30 +176,30 @@ function($, L) {
       title = l.title;
       source_url = l.url;
       
-      if ($.trim(selection_html) === '') {
+      if (empty_selection) {
         selection_html = $("#current-entry .item-body > div").html()
       }
     } else if (/cloud\.feedly\.com\//.test(document.location)) {
-      var $item = $(".selectedEntry")
+      var $item = $(".selectedEntry");
       
       if (!$item.get(0)) {
         // seems like sometimes selectedEntry doesn't exist, but inlineFrame does...
-        $item = $(".inlineFrame")
+        $item = $(".inlineFrame");
       }
       
       if (!$item.get(0)) {
         alert("Open an item first!"); window.__remove_sharebox(); throw(0);
       }
       
-      var $header = $item.find(".entryHolder .entryTitle")
+      var $header = $item.find(".entryHolder .entryTitle");
       
       var div = document.createElement(div);
       div.innerHTML = $header.html();
       title = div.firstChild.nodeValue;
       
-      source_url = $header.attr("href")
+      source_url = $header.attr("href");
       
-      if ($.trim(selection_html) === '') {
+      if (empty_selection) {
         selection_html = $item.find(".entryBody > .content").html()
       }
     } else if (/newsblur\.com\//.test(document.location)) {
@@ -211,32 +213,32 @@ function($, L) {
 	console.error(exception_var_1);
       }
       
-      var $header = $item.find(".NB-feed-story-title")
+      var $header = $item.find(".NB-feed-story-title");
       
       var div = document.createElement(div);
       div.innerHTML = $header.html();
       title = div.firstChild.nodeValue;
       
-      source_url = $header.attr("href")
+      source_url = $header.attr("href");
       
-      if ($.trim(selection_html) === '') {
-        selection_html = $item.find(".NB-feed-story-content").html()
+      if (empty_selection) {
+        selection_html = $item.find(".NB-feed-story-content").html();
       }
     } else if (/digg\.com\/reader/.test(document.location)) {
-      var $item = $(".feeditem-list.expanded")
+      var $item = $(".feeditem-list.expanded");
       
       if (!$item.get(0)) { alert("Open an item first!"); window.__remove_sharebox(); throw(0); }
       
-      var $header = $item.find(".story-title > a")
+      var $header = $item.find(".story-title > a");
       
       var div = document.createElement(div);
       div.innerHTML = $header.html();
       title = div.firstChild.nodeValue;
       
-      source_url = $header.attr("href")
+      source_url = $header.attr("href");
       
-      if ($.trim(selection_html) === '') {
-        selection_html = $item.find(".detail-body").html()
+      if (empty_selection) {
+        selection_html = $item.find(".detail-body").html();
       }
     }
     
@@ -251,7 +253,7 @@ function($, L) {
     
     var target = window.location.protocol + "//" + bookmarklet_host();
     
-    win.postMessage(payload, target)
+    win.postMessage(payload, target);
   }
   
   var remove_revisions = function(share_node) {
