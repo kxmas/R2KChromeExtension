@@ -77,7 +77,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar";    
+    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -163,7 +163,10 @@ function($, L) {
     var selection_html = get_selection_html();
     var empty_selection = ($.trim(selection_html) === '');
     
-    var full_html = $("body").html();
+    var full_html = fabricate_selection('body');
+    if (full_html === '') {
+      full_html = $("body").html();
+    }
     
     var win = $("#"+ sharebox_id).find("iframe")[0].contentWindow;
     
@@ -241,6 +244,16 @@ function($, L) {
       selection_html = fabricate_selection(".post-content.entry-content, .entry-content, .post-content");
     } else if (empty_selection && /buzzfeed\.com/.test(document.location)) {
       selection_html = fabricate_selection('div[data-print="body"]');
+    } else if (empty_selection && /theverge\.com/.test(document.location)) {
+      selection_html = fabricate_selection('.article-body');
+    } else if (empty_selection && /theatlantic\.com/.test(document.location)) {
+      selection_html = fabricate_selection('.article-content');
+    } else if (empty_selection && /reason\.com/.test(document.location)) {
+      selection_html = fabricate_selection('.entry');
+    } else if (empty_selection && /talkingpointsmemo\.com/.test(document.location)) {
+      selection_html = fabricate_selection('section.story');
+    } else if (empty_selection && /reuters\.com/.test(document.location)) {
+      selection_html = fabricate_selection('#articleText');
     }
     
     var payload = {
