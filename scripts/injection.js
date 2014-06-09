@@ -77,7 +77,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit";    
+    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit, .story-header, .lede-container, .extended-byline, .story-footer";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -254,6 +254,8 @@ function($, L) {
       selection_html = fabricate_selection('section.story');
     } else if (empty_selection && /reuters\.com/.test(document.location)) {
       selection_html = fabricate_selection('#articleText');
+    } else if (empty_selection && /nytimes\.com/.test(document.location)) {
+      selection_html = fabricate_selection('#story');
     } else if (empty_selection && isWSJ(document.location)) {
       selection_html = fabricate_selection('#articleBody');
     }
