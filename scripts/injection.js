@@ -77,7 +77,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit, .story-header, .lede-container, .extended-byline, .story-footer";    
+    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit, .story-header, .lede-container, .extended-byline, .story-footer, .hoverZoomLink, .share-box, .photo > .caption";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -242,22 +242,27 @@ function($, L) {
       }
     } else if (empty_selection && isGawkerSite(document.location)) {
       selection_html = fabricate_selection(".post-content.entry-content, .entry-content, .post-content");
-    } else if (empty_selection && /buzzfeed\.com/.test(document.location)) {
-      selection_html = fabricate_selection('div[data-print="body"]');
-    } else if (empty_selection && /theverge\.com/.test(document.location)) {
-      selection_html = fabricate_selection('.article-body');
-    } else if (empty_selection && /theatlantic\.com/.test(document.location)) {
-      selection_html = fabricate_selection('.article-content');
-    } else if (empty_selection && /reason\.com/.test(document.location)) {
-      selection_html = fabricate_selection('.entry');
-    } else if (empty_selection && /talkingpointsmemo\.com/.test(document.location)) {
-      selection_html = fabricate_selection('section.story');
-    } else if (empty_selection && /reuters\.com/.test(document.location)) {
-      selection_html = fabricate_selection('#articleText');
-    } else if (empty_selection && /nytimes\.com/.test(document.location)) {
-      selection_html = fabricate_selection('#story');
     } else if (empty_selection && isWSJ(document.location)) {
       selection_html = fabricate_selection('#articleBody');
+    } else if (empty_selection) {
+      var site_selectors = {
+        'buzzfeed\\.com': 'div[data-print="body"]',
+        'theverge\\.com': '.article-body',
+        'theatlantic\\.com': '.article-content',
+        'reason\\.com': '.entry',
+        'talkingpointsmemo\\.com': 'section.story',
+        'reuters\\.com': '#articleText',
+        'nytimes\\.com': '#story',
+        'bloombergview\\.com': '.article_body'
+      };
+      
+      for (var pattern in site_selectors) {
+        var regex = new RegExp(pattern, "i");
+        if (regex.test(document.location)) {
+          selection_html = fabricate_selection(site_selectors[pattern]);
+          break;
+        } 
+      }
     }
     
     var payload = {
