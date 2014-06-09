@@ -254,6 +254,8 @@ function($, L) {
       selection_html = fabricate_selection('section.story');
     } else if (empty_selection && /reuters\.com/.test(document.location)) {
       selection_html = fabricate_selection('#articleText');
+    } else if (empty_selection && isWSJ(document.location)) {
+      selection_html = fabricate_selection('#articleBody');
     }
     
     var payload = {
