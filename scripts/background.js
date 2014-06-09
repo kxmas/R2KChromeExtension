@@ -13,7 +13,7 @@ chrome.contextMenus.onClicked.addListener(executeBookmarklet);
 chrome.runtime.onInstalled.addListener(function() {
   var title = "Note in R2K";
   var id = "r2kContextMenu";
-  var contexts = [ "page", "selection", "frame" ];
+  var contexts = [ "page", "selection", "frame", "link", "image" ];
   var id = chrome.contextMenus.create({"id": id, "title": title, "contexts": contexts,
     "enabled": true
   }, function() {
