@@ -2,8 +2,9 @@
   "manifest_version": 2,
 
   "name": "Note in Reader2000",
+  "short_name": "Note in R2K",
   "description": "Shares content to Reader2000",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "icons": {
     "16": "images/icon_16.png",
     "128": "images/icon_128.png"
