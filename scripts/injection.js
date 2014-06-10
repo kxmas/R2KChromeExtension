@@ -208,7 +208,7 @@ function($, L) {
       validate_item($item.get(0), "Open an item first!");
       
       try {
-	$item = $(remove_revisions($item.get(0)));
+	$item = $(remove_newsblur_annoyances($item.get(0)));
       } catch(exception_var_1) {
 	console.error(exception_var_1);
       }
@@ -253,10 +253,10 @@ function($, L) {
         'talkingpointsmemo\\.com': 'section.story',
         'reuters\\.com': '#articleText',
         'nytimes\\.com': '#story',
-        'bloombergview\\.com': '.article_body',
-        'washingtonpost\\.com': '.article-body',
+        'bloombergview\\.com': '.article_body',        
         'newyorker\\.com': '.entry-content',
-        'foxnews\\.com': 'div[itemprop="articleBody"]'
+        'foxnews\\.com': 'div[itemprop="articleBody"]',
+        'techcrunch\\.com': '.article-entry'
       };
       
       for (var pattern in site_selectors) {
@@ -308,11 +308,15 @@ function($, L) {
     }
   }
   
-  var remove_revisions = function(share_node) {
+  var remove_newsblur_annoyances = function(share_node) {
     var doc_fragment = document.createDocumentFragment();
     doc_fragment.appendChild(share_node.cloneNode(true));
     var $item = $(doc_fragment.firstChild);
     $item.find("del").remove();
+    
+    // remove slashdot ads.
+    
+    $item.find('a[rel="nofollow"] > img[style~="hidden"]').parent().remove();
     $item.find("ins").each(function(idx, elm) {
       if (elm.firstChild && elm.firstChild.nodeType === Node.TEXT_NODE) {
 	$(elm.firstChild).unwrap();
