@@ -77,7 +77,7 @@ function($, L) {
   }
   
   var remove_nuisances = function(doc_fragment) {
-    var nuisance_selectors = "iframe, script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit, .story-header, .lede-container, .extended-byline, .story-footer, .hoverZoomLink, .share-box, .photo > .caption, .gig-share-bar-container, .a-share, .anno-right";    
+    var nuisance_selectors = "script, meta, noscript, figcaption, .photo-caption, .stack-credit-art-figcaption, p[class*='targetCaption'], .clickToPlay, .cnnStryVidCont, .cnn_bulletbin, .cnnStryHghLght, q, .hidden, .instapaper_ignore, .social-media-column, aside, .hide, .wp-caption-text, figure > .credit, .share-tools-container, .tablet-ad, span[class*='mw-editsection'], sup.reference, .noprint, .sharetools, .share-tools, .visually-hidden, div.ad, .ad-placeholder, .sharebar, #sharebar, .social-button, .email-signup, #e_espn_morevideo, .splashRibbon, .m-ad, #follow-bar, .caption-text, .credit, .story-header, .lede-container, .extended-byline, .story-footer, .hoverZoomLink, .share-box, .photo > .caption, .gig-share-bar-container, .a-share, .anno-right, .advertisement";    
     var delNodes = doc_fragment.querySelectorAll(nuisance_selectors);    
     delete_nodes(delNodes);
     
@@ -284,12 +284,28 @@ function($, L) {
   
   var fabricate_selection = function(selector) {
     try {
-      var item = document.querySelector(selector);
-      if (item) {
-        var doc_fragment = document.createDocumentFragment();
-        doc_fragment.appendChild(item.cloneNode(true));
-        filter_doc_fragment(doc_fragment);
-        return doc_fragment.firstElementChild.outerHTML;
+      // TODO: Refactor this
+      var doc_fragment = document.createDocumentFragment();
+      if ($.isArray(selector)) {
+        var share_content = document.createElement("div");
+        doc_fragment.appendChild(share_content);
+        for (var i = 0; i < selector.length; i++) {          
+          var item = document.querySelector(selector[i]);
+          if (item) {
+            console.log("adding: " + item);
+            share_content.append(item.cloneNode(true));
+          }
+        }
+      } else {
+        var item = document.querySelector(selector);
+        if (item) {
+          doc_fragment.appendChild(item.cloneNode(true));
+        }
+      }
+      
+      if (doc_fragment.firstElementChild) {        
+        filter_doc_fragment(doc_fragment);        
+        return doc_fragment.firstElementChild.outerHTML;  
       } else {
         return '';
       }
