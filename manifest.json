@@ -4,9 +4,11 @@
   "name": "Note in Reader2000",
   "short_name": "Note in R2K",
   "description": "Shares content to Reader2000",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "icons": {
     "16": "images/icon_16.png",
+    "32": "images/icon_32.png",
+    "64": "images/icon_64.png",
     "128": "images/icon_128.png"
   },
   "browser_action": {
