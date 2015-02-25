@@ -1,0 +1,17 @@
+.sharebox {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    resize: none;
+    z-index: 2147483647;
+}
+
+.r2k-iframe {
+    border: 0px none black;
+    width: 533px;
+    height: 522px;
+    background-image: url(/images/large_throbber.gif);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    resize: inherit;
+}

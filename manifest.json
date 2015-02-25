@@ -18,8 +18,12 @@
   "permissions": [
     "activeTab",
     "contextMenus",
-    "*://www.reader2000.com/*"
+    "http://www.reader2000.com/*",
+    "https://www.reader2000.com/*"
   ],
+  "externally_connectable": {
+    "matches": ["http://www.reader2000.com/*", "https://www.reader2000.com/*"]
+  },
   "background": {
     "persistent": false,
     "scripts": ["scripts/background.js"]
@@ -28,5 +32,6 @@
     "scripts/injection.js",
     "scripts/jquery.js"
   ],
-  "content_security_policy": "default-src 'none'; style-src 'self'; script-src 'self' https://www.reader2000.com; object-src 'self'; connect-src https://www.reader2000.com"
+  "content_security_policy":
+    "default-src 'none'; style-src 'self'; script-src 'self' https://www.reader2000.com https://fayeresnick.herokuapp.com; object-src 'self'; connect-src https://www.reader2000.com http://fayeresnick.herokuapp.com/faye.js; frame-src 'self' http://www.reader2000.com https://www.reader2000.com"
 }
