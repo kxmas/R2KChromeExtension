@@ -4,7 +4,7 @@ function requestShareInfo() {
 }
 
 function receiveHTMLMessage(event) {
-    if (event.origin !== "https://www.reader2000.com") {
+    if (event.origin !== "https://www.reader2000.com" && event.origin !== "http://www.reader2000.com") {
         return;
     }
     if (event.data === "remove_sharebox" || event.data === "hide_sharebox") {
@@ -17,6 +17,8 @@ function receiveHTMLMessage(event) {
 var receiveExtensionMessage = function(request, sender, sendResponse) {
     if (request.cmd === "populate_share") {
         $("#__nir-sharebox").find("iframe")[0].contentWindow.postMessage(request, request.target);
+    } else if (request.cmd === "set_iframe_src") {
+        $("iframe.r2k-iframe").attr("src", request.source_url);
     }
 }
 

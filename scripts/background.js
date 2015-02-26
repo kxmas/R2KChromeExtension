@@ -39,6 +39,16 @@ var addMessageListener = function(window, tab) {
 
 }
 
+function iframeSrcUrl(tabUrl) {
+    var httpsRegex = /^https:\/\//i;
+    var iframeSrc = "http://www.reader2000.com/shares/new?bookmarklet=true"
+    if (httpsRegex.test(tabUrl)) {
+        return "https://www.reader2000.com/shares/new?bookmarklet=true";
+    } else {
+        return "http://www.reader2000.com/shares/new?bookmarklet=true";
+    }
+}
+
 function executeBookmarklet(tab) {
     chrome.tabs.executeScript(tab.id, {
         file: 'scripts/jquery.js',
@@ -53,6 +63,14 @@ function executeBookmarklet(tab) {
         console.debug("created window: " + window);
         window.alwaysOnTop = true;
         window.focused = true;
+
+        var iframeSrc = iframeSrcUrl(tab.url);
+        var request = {
+            'cmd': 'set_iframe_src',
+            'source_url': iframeSrc
+        }
+        chrome.tabs.sendMessage(window.tabs[0].id, request);
+
         addMessageListener(window, tab);
     });
 }
@@ -68,7 +86,9 @@ chrome.runtime.onInstalled.addListener(function () {
         "id": id, "title": title, "contexts": contexts,
         "enabled": true
     }, function () {
-        console.error(chrome.runtime.lastError);
+        if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+        }
     });
     console.debug("created context menu with id: " + id);
 });

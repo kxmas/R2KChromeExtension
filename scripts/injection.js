@@ -16,21 +16,6 @@
 })(window, function (window, $) {
     console.debug("running injection.js");
 
-    var __nir_handle_message = function (e) {
-        console.log("handle message: " + e);
-        if (e.origin != window.location.protocol + "//" + bookmarklet_host()) {
-            console.warn("unexpected message from event origin '" + e.origin + "'");
-            return;
-        }
-        var data = e.data;
-        if (data == "remove_sharebox") {
-            window.__remove_sharebox();
-        }
-        if (data == "hide_sharebox") {
-            window.__hide_sharebox();
-        }
-    }
-
     var get_selection_html = function () {
         if (document.selection) {
             var c = document.selection.createRange();
@@ -140,7 +125,7 @@
     var sharebox_id = "__nir-sharebox"
 
     var bookmarklet_host = function () {
-        return (window.__nir_bookmarklet_host ? window.__nir_bookmarklet_host : 'www.reader2000.com');
+        return 'www.reader2000.com';
     }
 
     window.__nir_get_info_from_parent = function () {
@@ -253,7 +238,7 @@
             }
         }
 
-        var target = "https://" + bookmarklet_host();
+        var target = window.location.protocol + "//" + bookmarklet_host();
         var domain = chrome.extension.getURL('');
         domain = domain.substring(0, domain.lastIndexOf('/'));
         var payload = {
@@ -268,10 +253,8 @@
         }
 
         chrome.runtime.sendMessage(payload, function(response) {
-            console.log("injection.js got response: " + response);
+            console.debug("injection.js got response: " + response);
         });
-
-        //win.postMessage(payload, target);
     }
 
     var fabricate_selection = function (selector) {
@@ -332,24 +315,5 @@
         });
         return $item.get();
     }
-    /*
-     var show_sharebox = function() {
-     if (!bookmarklet_host().match(/^www/i) && bookmarklet_host() !== "reader2000.fwd.wf") {
-     alert("Sorry (Lo siento... / متاسف...)!!!! But you've gotta go back to R2K and reinstall your bookmarklet. If you already did that and are STILLLLL having problems, hit up feedback@reader2000.com and we'll hook you up")
-     return false
-     }
-
-     window.__remove_sharebox()
-     $box = $("<div>", {"id" : sharebox_id, "style" : 'background-color: white;height:495px; position: fixed; right: 8px; top: 8px; width: 520px; z-index:2147483647;' })
-
-     var html = " \
-     <iframe onload='__nir_get_info_from_parent()' style='border:4px solid black;width:100%; height:100%; background-image: url(" + window.location.protocol + "//" + bookmarklet_host() + "/images/large_throbber.gif);background-repeat: no-repeat;background-position: 50% 50%;' src='" + window.location.protocol + "//" + bookmarklet_host() +"/shares/new?bookmarklet=true'></iframe>"
-     $box.html(html)
-     $box.appendTo('body')
-     }
-
-     show_sharebox()
-
-     */
 
 });
