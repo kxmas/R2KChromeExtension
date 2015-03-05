@@ -26,9 +26,11 @@
         var sel = getSelection();
         if (sel == null) return '';
         try {
-            var w = getSelection().getRangeAt(0).cloneContents();
-            filter_doc_fragment(w);
-            nNd.appendChild(w);
+            for (var i = 0; i < sel.rangeCount; i++) {
+                var w = sel.getRangeAt(i).cloneContents();
+                filter_doc_fragment(w);
+                nNd.appendChild(w);
+            }
 
             $(nNd).find(".twitter-tweet").each(function (index, element) {
                 var tweetUrl = $("#" + element.id).contents().find(".tweet").last().attr("cite")
@@ -239,8 +241,6 @@
         }
 
         var target = window.location.protocol + "//" + bookmarklet_host();
-        var domain = chrome.extension.getURL('');
-        domain = domain.substring(0, domain.lastIndexOf('/'));
         var payload = {
             'cmd': 'populate_share',
             'originator': 'r2k',
@@ -248,7 +248,6 @@
             'selection': selection_html,
             'full_html': full_html,
             'source_url': source_url,
-            'domain': domain,
             'target': target
         }
 

@@ -40,12 +40,12 @@ var addMessageListener = function(window, tab) {
 }
 
 function iframeSrcUrl(tabUrl) {
+    var bookmarkleturi = "//www.reader2000.com/shares/new?bookmarklet=true";
     var httpsRegex = /^https:\/\//i;
-    var iframeSrc = "http://www.reader2000.com/shares/new?bookmarklet=true"
     if (httpsRegex.test(tabUrl)) {
-        return "https://www.reader2000.com/shares/new?bookmarklet=true";
+        return "https:" + bookmarkleturi;
     } else {
-        return "http://www.reader2000.com/shares/new?bookmarklet=true";
+        return "http:" + bookmarkleturi;
     }
 }
 

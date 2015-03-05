@@ -7,16 +7,30 @@ function receiveHTMLMessage(event) {
     if (event.origin !== "https://www.reader2000.com" && event.origin !== "http://www.reader2000.com") {
         return;
     }
-    if (event.data === "remove_sharebox" || event.data === "hide_sharebox") {
-        chrome.runtime.onMessage.removeListener(receiveExtensionMessage);
+    switch (event.data) {
+        case "hide_sharebox":
+            var iframe = $("#__nir-sharebox").find("iframe.r2k-iframe")[0];
+            var iframeOnLoad = function(pageShowEvent) {
+                console.log("pageShowEvent: %s", pageShowEvent);
+                iframe.removeEventListener("load", iframeOnLoad, false);
+                chrome.runtime.onMessage.removeListener(receiveExtensionMessage);
+                chrome.runtime.sendMessage(event.data);
+            }
+            iframe.addEventListener("load", iframeOnLoad, false);
+            break;
+        case "remove_sharebox":
+            chrome.runtime.onMessage.removeListener(receiveExtensionMessage);
+        default:
+            chrome.runtime.sendMessage(event.data);
     }
-    // now just pass it...
-    chrome.runtime.sendMessage(event.data);
+
 }
 
 var receiveExtensionMessage = function(request, sender, sendResponse) {
     if (request.cmd === "populate_share") {
-        $("#__nir-sharebox").find("iframe")[0].contentWindow.postMessage(request, request.target);
+        var domain = chrome.extension.getURL('');
+        request.domain = domain.substring(0, domain.lastIndexOf('/'));
+        $("#__nir-sharebox").find("iframe.r2k-iframe")[0].contentWindow.postMessage(request, request.target);
     } else if (request.cmd === "set_iframe_src") {
         $("iframe.r2k-iframe").attr("src", request.source_url);
     }
