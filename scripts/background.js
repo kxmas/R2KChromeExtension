@@ -14,7 +14,6 @@ var addMessageListener = function(window, tab) {
     var receiveMessage = function (request, sender, sendResponse) {
         var command = (request.cmd ? request.cmd : request);
 
-        console.debug("cmd: " + command);
         switch (command) {
             case "send_info":
                 chrome.tabs.executeScript(tab.id, {
@@ -22,8 +21,9 @@ var addMessageListener = function(window, tab) {
                     runAt: 'document_end'
                 });
                 break;
-            case "populate_share":
-                chrome.tabs.sendMessage(window.tabs[0].id, request);
+            case "populate_share":                
+                request.cmd = "popup_populate_share"
+                chrome.tabs.sendMessage(window.tabs[0].id, request);                
                 break;
             case "remove_sharebox":
                 closeSharebox(window, receiveMessage);

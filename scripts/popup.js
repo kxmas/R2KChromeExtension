@@ -27,7 +27,7 @@ function receiveHTMLMessage(event) {
 }
 
 var receiveExtensionMessage = function(request, sender, sendResponse) {
-    if (request.cmd === "populate_share") {
+    if (request.cmd === "popup_populate_share") {
         var domain = chrome.extension.getURL('');
         request.domain = domain.substring(0, domain.lastIndexOf('/'));
         $("#__nir-sharebox").find("iframe.r2k-iframe")[0].contentWindow.postMessage(request, request.target);
