@@ -58,21 +58,32 @@ function executeBookmarklet(tab) {
         file: 'scripts/injection.js',
         runAt: 'document_end'
     });
-
-    var appWindow = chrome.windows.create({'url':'pages/popup.html', 'type': 'popup', 'height': 540, 'width': 550 }, function(window) {
-        console.debug("created window: " + window);
-        window.alwaysOnTop = true;
-        window.focused = true;
-
-        var iframeSrc = iframeSrcUrl(tab.url);
-        var request = {
-            'cmd': 'set_iframe_src',
-            'source_url': iframeSrc
+    
+    chrome.windows.getCurrent(function(parentWin) {
+        var createInfo = {
+            'url':'pages/popup.html',
+            'type': 'popup',
+            'height': 540,
+            'width': 550
         }
-        chrome.tabs.sendMessage(window.tabs[0].id, request);
+        if (parentWin.left && parentWin.width) {            
+            createInfo.left = parentWin.left + parentWin.width - 550;
+        }
+        var appWindow = chrome.windows.create(createInfo, function(window) {
+            console.debug("created window: " + window);
+            window.alwaysOnTop = true;
+            window.focused = true;
 
-        addMessageListener(window, tab);
-    });
+            var iframeSrc = iframeSrcUrl(tab.url);
+            var request = {
+                'cmd': 'set_iframe_src',
+                'source_url': iframeSrc
+            }
+            chrome.tabs.sendMessage(window.tabs[0].id, request);
+
+            addMessageListener(window, tab);
+        });
+    });    
 }
 
 chrome.browserAction.onClicked.addListener(executeBookmarklet);
