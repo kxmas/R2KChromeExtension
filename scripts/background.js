@@ -12,6 +12,7 @@ var closeSharebox = function(window, messageListener) {
 
 var addMessageListener = function(window, tab) {
     var receiveMessage = function (request, sender, sendResponse) {
+        console.debug("received message: " + request);
         var command = (request.cmd ? request.cmd : request);
 
         switch (command) {
@@ -39,16 +40,6 @@ var addMessageListener = function(window, tab) {
 
 }
 
-function iframeSrcUrl(tabUrl) {
-    var bookmarkleturi = "//www.reader2000.com/shares/new?bookmarklet=true";
-    var httpsRegex = /^https:\/\//i;
-    if (httpsRegex.test(tabUrl)) {
-        return "https:" + bookmarkleturi;
-    } else {
-        return "http:" + bookmarkleturi;
-    }
-}
-
 function executeBookmarklet(tab) {
     chrome.tabs.executeScript(tab.id, {
         file: 'scripts/jquery.js',
@@ -63,24 +54,16 @@ function executeBookmarklet(tab) {
         var createInfo = {
             'url':'pages/popup.html',
             'type': 'popup',
-            'height': 540,
-            'width': 550
+            'height': 545,
+            'width': 555
         }
         if (parentWin.left && parentWin.width) {            
-            createInfo.left = parentWin.left + parentWin.width - 550;
+            createInfo.left = parentWin.left + parentWin.width - 555;
         }
         var appWindow = chrome.windows.create(createInfo, function(window) {
             console.debug("created window: " + window);
             window.alwaysOnTop = true;
             window.focused = true;
-
-            var iframeSrc = iframeSrcUrl(tab.url);
-            var request = {
-                'cmd': 'set_iframe_src',
-                'source_url': iframeSrc
-            }
-            chrome.tabs.sendMessage(window.tabs[0].id, request);
-
             addMessageListener(window, tab);
         });
     });    

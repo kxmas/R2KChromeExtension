@@ -4,6 +4,7 @@ function requestShareInfo() {
 }
 
 function receiveHTMLMessage(event) {
+    console.debug("received event: " + event);
     if (event.origin !== "https://www.reader2000.com" && event.origin !== "http://www.reader2000.com") {
         return;
     }
