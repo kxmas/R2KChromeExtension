@@ -240,7 +240,7 @@
             }
         }
 
-        var target = window.location.protocol + "//" + bookmarklet_host();
+        var target = "https://" + bookmarklet_host();
         var payload = {
             'cmd': 'populate_share',
             'originator': 'r2k',

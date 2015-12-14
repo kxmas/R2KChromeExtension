@@ -4,7 +4,7 @@
   "name": "Note in Reader2000",
   "short_name": "Note in R2K",
   "description": "Shares content to Reader2000",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "icons": {
     "16": "images/icon_16.png",
     "32": "images/icon_32.png",
